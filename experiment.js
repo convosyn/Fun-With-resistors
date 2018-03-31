@@ -13,7 +13,9 @@ var oml = {
 	TBL: "11",
 	TBR: "12",
 	RB: "13",
-	BL: "14"
+	BL: "14",
+	ENDA: "15",
+	ENDB: "16"
 }
 var raycaster= new THREE.Raycaster();
 var mouse = new THREE.Vector2();
@@ -30,7 +32,7 @@ var curLevelText = null;
 var levelTextInfo = null;
 var lvl;
 var fBoard;
-var prevSize = window.innerWidth;
+var prevSize = window.innerWidth;console.log("matched: " + 14);
 var pollingBool = false;
 
 function polling(ms = 1000){
@@ -54,9 +56,10 @@ function polling(ms = 1000){
 const levelDet = {
 	1: {
 		"map": [
-			oml.MHF + "-" + oml.RB + "-" + oml.MHF +"-" + oml.MHF + "-" + oml.RB + "-" + oml.MHF,
+			oml.ENDA + "-" + oml.RB + "-" + oml.MHF +"-" + oml.MHF + "-" + oml.RB + "-" + oml.ENDB,
+
 			oml.BL + "-" + oml.BTL + "-" + oml.RB + "-" + oml.BTR + "\n" +
-			oml.MHF + "-" + oml.VLF + "-" + oml.BL + "-" + oml.VRF + "-" + oml.MHF + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BBL + "-" + oml.RB + "-" + oml.BBR
 		],
 		"resistances": [1, 2, 3, 4],
@@ -67,90 +70,97 @@ const levelDet = {
 	2: {
 		"map": [
 			oml.BL + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "\n" +
-			oml.MHF + "-" + oml.TBL + "-" + oml.RB + "-" + oml.TBR + "-" + oml.MHF + "\n" +
+			oml.ENDA + "-" + oml.TBL + "-" + oml.RB + "-" + oml.TBR + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BBL + "-" + oml.RB + "-" + oml.BBR,
-			oml.MHF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "-" + oml.MHF + "\n" +
+
+			oml.BL + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BBL + "-" + oml.MHF + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.BBR
 		],
-		"resistances": [1, 2, 3, 4],
-		"solutions": [[0, 1, 2], [0, 2, 3]],
-		"questions": [(11 / 6).toFixed(2), 2],
+		"resistances": [1, 2, 3, 4, 5],
+		"solutions": [[1, 3, 4], [0, 2, 3]],
+		"questions": [(11 / 38).toFixed(2), 2],
 		"formula": [
-				"( 0 * 1 + 1 * 2 + 2 * 0 ) / ( 0 + 1 + 2 )",
+				"( 0 + 1 + 2 ) / ( 0 * 1 + 1 * 2 + 2 * 0 )",
 				"( ( 0 + 1 ) * 2 ) / ( 0 + 1 + 2 )"
 			]
 	},
 	3: {
 		"map": [
-			oml.MHF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "-" + oml.MHF + "\n" +
+			oml.BL + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BBL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BBR,
 			
-			oml.MHF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "-" + oml.MHF + "\n" +
+			oml.BL + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.VLF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.BTR + "-" + oml.BL + "-" + oml.VRF + "\n" + 
 			oml.BL + "-" + oml.BBL + "-" + oml.BBL + "-" + oml.RB + "-" + oml.BBR + "-" + oml.MHF + "-" + oml.BBR,
 
 			oml.BL  + "-" + oml.BL + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "\n" +
 			oml.BL  + "-" + oml.BTL + "-" + oml.BBL + "-" + oml.RB +"-" + oml.BBR + "-" + oml.BTR + "\n" +
-			oml.MHF + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.MHF + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL  + "-" + oml.BBL + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "-" + oml.BBR + "\n" +
 			oml.BL  + "-" + oml.BL + "-" + oml.BBL + "-" + oml.RB +"-" + oml.BBR
 		],
 		"resistances": [2, 3, 4, 5, 6],
 		"solutions": [[0, 2, 1, 3], [1, 0, 2, 4], [3, 1, 2, 0]],
-		"questions": [(48 / 14).toFixed(2), (120 / 74).toFixed(2), (45 / 14).toFixed(2)],
+		"questions": [(48 / 14).toFixed(2), (120 / 74).toFixed(2), (14 / 45).toFixed(2)],
 		"formula": [
 			"( ( 0 + 1 ) * ( 2 + 3 ) ) / ( 0 + 1 + 2 + 3 )", 
 			"( ( 0 + 1 ) * ( 2 * 3 ) ) / ( ( 2 * 3 ) + ( 2 + 3 ) * ( 0 + 1 ) )",
-			"( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 0 ) / ( 0 + 1 + 2 + 3 )"
+			"( 0 + 1 + 2 + 3 ) / ( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 0 )"
 		]
 	},
 	4: {
 		"map": [
-			oml.MHF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "-" + oml.MHF + "\n" +
+			oml.BL + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BBL + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.MHF + "-" +  oml.BBR,
 			
 			oml.BL  + "-" + oml.BTL + "-" + oml.MHF + "-" + oml.RB +"-" + oml.MHF + "-" + oml.BTR + "\n" +
-			oml.MHF + "-" + oml.BBL + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "-" + oml.BBR + "-" + oml.MHF + "\n" +
+			oml.ENDA + "-" + oml.BBL + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "-" + oml.BBR + "-" + oml.ENDB + "\n" +
 			oml.BL  + "-" + oml.BL + "-" + oml.TBL + "-" + oml.RB +"-" + oml.TBR + "\n" + 
 			oml.BL  + "-" + oml.BL + "-" + oml.BBL + "-" + oml.RB +"-" + oml.BBR
 		],
 		"resistances": [3, 4, 5, 6, 7],
 		"solutions": [[1, 2, 0, 3], [3, 4, 1, 0]],
-		"questions": [4, 5],
+		"questions": [4, (1 / 5).toFixed(2)],
 		"formula": [
 			"( ( 0 + 1 + 2 ) * 3 ) / ( 0 + 1 + 2 + 3 )",
-			"( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 0 ) / ( 0 + 1 + 2 + 3 )"
+			"( 0 + 1 + 2 + 3 ) / ( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 0 )"
 		]
 	},
 	5: {
 		"map": [
-			oml.MHF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "-" + oml.MHF + "\n" +
+			oml.BL + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BBL + "-" + oml.MHF + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.MHF + "-" +  oml.BBR,
-		
-			oml.MHF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "-" + oml.MHF + "\n" +
+			
+			oml.BL + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + + oml.MHF + "-" + oml.MHF + "-" + oml.RB + "-" + oml.BTR + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BBL + "-" + oml.MHF + "-" + oml.MHF + "-" + oml.BTL + "-" + oml.RB + "-" + oml.BTR + "-" + oml.MHF + "-" + oml.MHF + "-" +  oml.BBR + "\n" + 
 			oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.BBL + "-" + oml.RB + "-" + oml.BBR,
 
 			oml.BL  + "-" + oml.BTL + "-" + oml.RB + "-" + oml.MHF + "-" + oml.MHF +"-" + oml.RB + "-" + oml.BTR + "\n" +
-			oml.MHF + "-" + oml.BBL + "-" + oml.MHF + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "-" + oml.BBR + "-" + oml.MHF + "\n" +
+			oml.ENDA + "-" + oml.BBL + "-" + oml.MHF + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "-" + oml.BBR + "-" + oml.ENDB + "\n" +
 			oml.BL + "-" + oml.BL  + "-" + oml.BL + "-" + oml.TBL + "-" + oml.RB +"-" + oml.TBR + "\n" + 
 			oml.BL + "-" + oml.BL  + "-" + oml.BL + "-" + oml.BBL + "-" + oml.RB +"-" + oml.BBR,
 
 			oml.BL  + "-" + oml.BL + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "\n" +
 			oml.BL  + "-" + oml.BTL + "-" + oml.BBL + "-" + oml.RB +"-" + oml.BBR + "-" + oml.BTR + "\n" +
-			oml.MHF + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.MHF + "\n" +
+			oml.ENDA + "-" + oml.VLF + "-" + oml.BL + "-" + oml.BL + "-" + oml.BL + "-" + oml.VRF + "-" + oml.ENDB + "\n" +
 			oml.BL  + "-" + oml.BBL + "-" + oml.BTL + "-" + oml.RB +"-" + oml.BTR + "-" + oml.BBR + "\n" +
 			oml.BL  + "-" + oml.BL + "-" + oml.TBL + "-" + oml.RB +"-" + oml.TBR + "\n" + 
 			oml.BL  + "-" + oml.BL + "-" + oml.BBL + "-" + oml.RB +"-" + oml.BBR
 		],
 		"resistances": [1, 2, 3, 4, 5, 6, 7],
 		"solutions": [[2, 0, 1, 3, 5], [6, 5, 2, 1, 3], [1, 2, 3, 4, 5], [5, 0, 2, 4, 6]],
-		"questions": [(60 / 16).toFixed(2), (128 / 104).toFixed(2), (370 / 149).toFixed(2), (101 / 22).toFixed(2)],
+		"questions": [(60 / 16).toFixed(2), (128 / 104).toFixed(2), (370 / 149).toFixed(2), (22 / 101).toFixed(2)],
 		"formula": [
 			"( ( 0 + 1 + 2 ) * ( 3 + 4 ) ) / ( 0 + 1 + 2 + 3 + 4 )",
 			"( ( 0 + 1 + 2 ) * ( 3 * 4 ) ) / ( ( 3 * 4 ) + ( 3 + 4 ) * ( 0 + 1 + 2 ) )",
 			"( ( 0 + 1 ) * ( 2 * 3 + 3 * 4 + 4 * 2 ) ) / ( ( 2 * 3 + 3 * 4 + 4 * 2 ) + ( 0 + 1 ) * ( 2 + 3 + 4 ) )",
-			"( ( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 4 + 4 * 0 ) / ( 0 + 1 + 2 + 3 + 4 ) )"
+			"( ( 0 + 1 + 2 + 3 + 4 ) / ( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 4 + 4 * 0 ) )"
 		]
 	}
 
@@ -423,7 +433,7 @@ class Pipes{
 		this.type = type;
 		this.params = params;
 		if(this.type == "HORIZONTAL"){
-			let paramsTemp = {align: ALIGNTOP, color: 0xffffff, half: true, part: true};
+			let paramsTemp = {align: ALIGNTOP, color: 0xffffff, half: true, part: true, ended: false, leftE: true};
 			for(const key of Object.keys(paramsTemp)){
 				if(!params.hasOwnProperty(key)){
 					params[key] = paramsTemp[key];
@@ -450,7 +460,11 @@ class Pipes{
 		let color = this.params.color;
 		let half = this.params.half;
 		let leftPart = this.params.part;
+		let ended = this.params.ended;
+		let leftE = this.params.leftE;
 		var pipeGeometry;
+		let group = new THREE.Group();
+		// let group = new 
 		if(half == false){
 			pipeGeometry = new THREE.PlaneGeometry(1, 0.1, 1, 1);
 		} else {
@@ -472,7 +486,26 @@ class Pipes{
 				pipe.position.x = 0.225;
 			}
 		}
-		return pipe;
+		if(ended == true){
+			let circleG = new THREE.CircleGeometry(0.16, 20);
+			let circleM = new THREE.MeshBasicMaterial({color: color});
+			let circle = new THREE.Mesh(circleG, circleM);
+			let text;
+			// circle.position.y 
+			if(leftE == true) {
+				circle.position.x = -0.5;
+				text = drawText("A", color, 0.5, 0.001, fontHelvetick, 0.0, true);
+				text.position.x = -1.2;
+			} else if(leftE == false) {
+				circle.position.x = +0.5;
+				text = drawText("B", color, 0.5, 0.001, fontHelvetick, 0.0, true);
+				text.position.x = +0.8;
+			}
+			group.add(circle);
+			group.add(text);
+		} 
+		group.add(pipe)
+		return group;
 	}
 
 	vertical(){
@@ -616,6 +649,7 @@ class ResistanceBox{
 		this.forIndex = index;
 		console.log("Showing for " + this.forIndex);
 		PIEaddElement(this.drawen);
+		this.redraw();
 		PIErender();
 	}
 
@@ -722,6 +756,16 @@ class ResistanceBox{
 		let res = this.resistances[index].clone();
 		this.emptyDraw();
 		return [res, i, index];
+	}
+	redraw(){
+		if(this.displaying == false) return;
+		if(window.innerWidth < 640){
+			this.drawen.position.x = 0;
+			this.drawen.scale.x = 2.0;
+		} else {
+			this.drawen.position.x = -7;
+			this.drawen.scale.x = 1.0;
+		}
 	}
 }
 
@@ -851,6 +895,14 @@ class LevelPart{
 						console.log("matched: " + 14);
 						temp = null
 					break;
+					case oml.ENDA:
+						console.log("matched: " + 15);
+						temp = new Pipes(HORIZONTAL, {align: ALIGNMIDDLE, color: this.color, half: false, ended: true, leftE: true});
+					break;
+					case oml.ENDB:
+						console.log("matched: " + 16);	
+						temp = new Pipes(HORIZONTAL, {align: ALIGNMIDDLE, color: this.color, half: false, ended: true, leftE: false});
+					break;
 				}
 				console.log(temp);
 				if(temp){
@@ -962,6 +1014,7 @@ class LevelPart{
 				this.availableResistances.freeResistance(this.mappedToResistance[this.dialogOpenedForIndex]);
 				PIEaddElement(this.objects[this.dialogOpenedForIndex]);
 				this.drawen.add(this.objects[this.dialogOpenedForIndex]);
+				this.availableResistances.draw(this.dialogOpenedForIndex);
 				this.filled[this.dialogOpenedForIndex] = null;
 				this.mappedToResistance[this.dialogOpenedForIndex] = -1;
 				this.dialogOpenedForIndex = -1;
@@ -1019,6 +1072,7 @@ class LevelPart{
 				}
 			}
 		}
+		this.availableResistances.redraw();
 		PIErender();
 	}
 
@@ -1084,15 +1138,15 @@ class LevelPart{
 		if(this.filled[index]){
 			this.dialogOpenedForIndex = index;
 			var box = new LevelCoverBoxEmptyObject(10, 4, 0x333333, 0xffffff, 0.3).draw;
-			var text1 = alignCenter(drawText("You Must delete this resistance", 0xffffff, 0.4, 0.001, fontHelvetick, 0.0, true), box, false, true)[0];
-			var text2 = alignCenter(drawText("before using another", 0xffffff, 0.4, 0.001, fontHelvetick, 0.0, true), box, false, true)[0];
+			var text1 = alignCenter(drawText("Replace this resistance?", 0xffffff, 0.6, 0.001, fontHelvetick, 0.0, true), box, false, true)[0];
+			// var text2 = alignCenter(drawText("before using another", 0xffffff, 0.4, 0.001, fontHelvetick, 0.0, true), box, false, true)[0];
 			text1.position.y = 1;
-			text2.position.y = 0;
+			// text2.position.y = 0;
 			text1.position.z = 0.1;
-			text2.position.z = 0.1;
+			// text2.position.z = 0.1;
 			var buttonCoverDELETE = new LevelCoverBoxEmptyObject(2, 1, 0x666666, 0x666666, 0.0, true).draw;
 			buttonCoverDELETE.position.z = 0.0;
-			var textDELETE = alignCenter(drawText("DELETE", 0xffffff, 0.3, 0.001, fontHelvetick, 0.0, true), buttonCoverDELETE, true, true)[0];
+			var textDELETE = alignCenter(drawText("REPLACE", 0xffffff, 0.3, 0.001, fontHelvetick, 0.0, true), buttonCoverDELETE, true, true)[0];
 			textDELETE.position.z = 1;
 			// textDELETE.position.y += 3;
 			// text
@@ -1123,7 +1177,7 @@ class LevelPart{
 			this.dialog.scale.y = 1.0;
 			this.dialog.add(box);
 			this.dialog.add(text1);
-			this.dialog.add(text2);
+			// this.dialog.add(text2);
 			this.dialog.add(this.buttonCANCEL);
 			this.dialog.add(this.buttonDELETE);
 			PIEaddElement(this.dialog);
@@ -1319,14 +1373,16 @@ class Level {
 		this.giveUpButton.scale.y = 0.6;
 		PIEaddElement(this.giveUpButton);
 
-		let qt1 = drawText("Fill the resistances in box to make", 0xdedede, 0.5, 0.001, fontGentilis, 0.0, true);
-		let qt2 = drawText("total resistance " + this.questions[this.currentPart] + " ohm of the circuit.", 0xdedede, 0.5, 0.001, fontGentilis, 0.0, true)
-		qt2.position.x = -0.5;
+		let qt1 = drawText("Click the boxes to choose resistors", 0xdedede, 0.5, 0.001, fontGentilis, 0.0, true);
+		let qt2 = drawText("so that the total resistance becomes " , 0xdedede, 0.5, 0.001, fontGentilis, 0.0, true);
+		let qt3 = drawText(this.questions[this.currentPart] + " ohm between A and B.", 0xdedede, 0.5, 0.001, fontGentilis, 0.0, true);
 		this.questionPosed = new THREE.Group();
 		qt2.position.y = -0.7;
+		qt3.position.y = -1.4;
 		this.questionPosed.add(qt1);
 		this.questionPosed.add(qt2);
-		this.questionPosed.position.set(-5, 4, 1.4);
+		this.questionPosed.add(qt3);
+		this.questionPosed.position.set(-6, 5.0, 1.4);
 		PIEaddElement(this.questionPosed);
 		this.getCheckButton();
 		PIEaddElement(this.checkButton);
@@ -1351,7 +1407,7 @@ class Level {
 		if(window.innerWidth < 640){
 			this.questionPosed.scale.x = 2.4;
 			this.questionPosed.scale.y = 1.0;
-			this.questionPosed.position.set(-12, 4, 1.4);
+			this.questionPosed.position.set(-12, 4.5, 1.4);
 			if(this.resetText){
 				this.resetText.scale.x = 3.0;
 				this.resetText.scale.y = 2.0
@@ -1364,7 +1420,8 @@ class Level {
 		} else {
 			this.questionPosed.scale.x = 1.0;
 			this.questionPosed.scale.y = 1.0;
-			this.questionPosed.position.set(-5, 4, 1.4);
+			// this.questionPosed.position.set(-5, 4, 1.4);
+			this.questionPosed.position.set(-5, 4.5, 1.4);
 			if(this.resetText){
 				this.resetText.scale.x = 1.0;
 				this.resetText.position.set(-1.5, -3.8, 1.6);
