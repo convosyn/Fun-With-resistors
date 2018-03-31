@@ -1248,7 +1248,7 @@ class Level {
 			this.resetText.position.set(-1.5, -3.8, 1.6);
 			PIEaddElement(this.resetText);
 		} else {
-			this.resultText = drawText("WRONG!", 0xff0000, 0.5, 0.001, fontOptimer, 0.0, true);
+			this.resultText = drawText("WRONG!", 0xff4433, 0.5, 0.001, fontOptimer, 0.0, true);
 			this.resultText.position.set(-2, -4.5, 1.6);
 		}
 		this.redrawLevel();
