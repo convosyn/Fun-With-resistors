@@ -124,7 +124,7 @@ const levelDet = {
 		],
 		"resistances": [3, 4, 5, 6, 7],
 		"solutions": [[1, 2, 0, 3], [3, 4, 1, 0]],
-		"questions": [4, (1 / 5).toFixed(2)],
+		"questions": [4, (504 / 450).toFixed(2)],
 		"formula": [
 			"( ( 0 + 1 + 2 ) * 3 ) / ( 0 + 1 + 2 + 3 )",
 			"( 0 * 1 * 2 * 3 ) / ( ( 0 + 1 ) * 2 * 3 + ( 2 + 3 ) * 0 * 1 )"
@@ -1076,6 +1076,18 @@ class LevelPart{
 		PIErender();
 	}
 
+	removeFromDisplay(){
+		if(this.availableResistances.isDisplay) this.availableResistances.emptyDraw();
+		if(this.dialog){
+			console.log("delete clicked");
+			PIEremoveElement(this.dialog);
+			console.log("Dialog open for " + this.dialogOpenedForIndex);
+			console.log("Resistance in this " + this.filled[this.dialogOpenedForIndex]);
+			this.dialogOpenedForIndex = -1;
+			this.dialog = null;
+		}
+	}
+
 	getResistance(i, ind){
 		let elems = this.availableResistances.getResistance(i);
 		if(elems){
@@ -1301,6 +1313,7 @@ class Level {
 			
 		if(raycaster.intersectObjects(this.checkButton.children).length > 0 && this.gaveUpBool[this.currentPart] == false){
 			console.log("checking solution");
+			this.levelDrawen.removeFromDisplay();
 			this.evaluate();
 			return true;
 		}
@@ -1308,7 +1321,7 @@ class Level {
 		if(raycaster.intersectObjects(this.giveUpButton.children).length > 0){
 			console.log("Give up button called");
 			if(this.resultText) PIEremoveElement(this.resultText);
-			
+			this.levelDrawen.removeFromDisplay();
 			this.resetText = drawText("click on Reset", 0xbcbcbc, 0.3, 0.001, fontOptimer, 0.0, true);
 			this.resetText.position.set(-1.5, -3.8, 1.6);
 			PIEaddElement(this.resetText);
