@@ -79,9 +79,9 @@ const levelDet = {
 		],
 		"resistances": [1, 2, 3, 4, 5],
 		"solutions": [[1, 3, 4], [0, 2, 3]],
-		"questions": [(11 / 38).toFixed(2), 2],
+		"questions": [(20 / 19).toFixed(2), 2],
 		"formula": [
-				"( 0 + 1 + 2 ) / ( 0 * 1 + 1 * 2 + 2 * 0 )",
+				"( 0 * 1 * 2 ) / ( 0 * 1 + 1 * 2 + 2 * 0 )",
 				"( ( 0 + 1 ) * 2 ) / ( 0 + 1 + 2 )"
 			]
 	},
@@ -104,11 +104,11 @@ const levelDet = {
 		],
 		"resistances": [2, 3, 4, 5, 6],
 		"solutions": [[0, 2, 1, 3], [1, 0, 2, 4], [3, 1, 2, 0]],
-		"questions": [(48 / 14).toFixed(2), (120 / 74).toFixed(2), (14 / 45).toFixed(2)],
+		"questions": [(48 / 14).toFixed(2), (120 / 74).toFixed(2), (60 / 77).toFixed(2)],
 		"formula": [
 			"( ( 0 + 1 ) * ( 2 + 3 ) ) / ( 0 + 1 + 2 + 3 )", 
 			"( ( 0 + 1 ) * ( 2 * 3 ) ) / ( ( 2 * 3 ) + ( 2 + 3 ) * ( 0 + 1 ) )",
-			"( 0 + 1 + 2 + 3 ) / ( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 0 )"
+			"( 0 * 1 * 2 * 3 ) / ( ( 0 + 1 ) * 2 * 3 + ( 2 + 3 ) * 0 * 1 )"
 		]
 	},
 	4: {
@@ -127,7 +127,7 @@ const levelDet = {
 		"questions": [4, (1 / 5).toFixed(2)],
 		"formula": [
 			"( ( 0 + 1 + 2 ) * 3 ) / ( 0 + 1 + 2 + 3 )",
-			"( 0 + 1 + 2 + 3 ) / ( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 0 )"
+			"( 0 * 1 * 2 * 3 ) / ( ( 0 + 1 ) * 2 * 3 + ( 2 + 3 ) * 0 * 1 )"
 		]
 	},
 	5: {
@@ -155,12 +155,12 @@ const levelDet = {
 		],
 		"resistances": [1, 2, 3, 4, 5, 6, 7],
 		"solutions": [[2, 0, 1, 3, 5], [6, 5, 2, 1, 3], [1, 2, 3, 4, 5], [5, 0, 2, 4, 6]],
-		"questions": [(60 / 16).toFixed(2), (128 / 104).toFixed(2), (370 / 149).toFixed(2), (22 / 101).toFixed(2)],
+		"questions": [(60 / 16).toFixed(2), (128 / 104).toFixed(2), (60 / 49).toFixed(2), (630 / 1161).toFixed(2)],
 		"formula": [
 			"( ( 0 + 1 + 2 ) * ( 3 + 4 ) ) / ( 0 + 1 + 2 + 3 + 4 )",
 			"( ( 0 + 1 + 2 ) * ( 3 * 4 ) ) / ( ( 3 * 4 ) + ( 3 + 4 ) * ( 0 + 1 + 2 ) )",
-			"( ( 0 + 1 ) * ( 2 * 3 + 3 * 4 + 4 * 2 ) ) / ( ( 2 * 3 + 3 * 4 + 4 * 2 ) + ( 0 + 1 ) * ( 2 + 3 + 4 ) )",
-			"( ( 0 + 1 + 2 + 3 + 4 ) / ( 0 * 1 + 1 * 2 + 2 * 3 + 3 * 4 + 4 * 0 ) )"
+			"( ( 2 * 3 * 4 ) * ( 0 + 1 ) ) / ( ( 0 + 1 ) * ( 2 * 3 + 3 * 4 + 4 * 2 ) + ( 2 * 3 * 4 ) )",
+			"( ( 0 * 1 * 2 * 3 * 4 ) / ( ( 0 + 1 ) * ( 2 * 3 * 4 ) + ( 2 * 3 + 3 * 4 + 4 * 2 ) * ( 0 * 1 ) ) )"
 		]
 	}
 
@@ -1385,6 +1385,11 @@ class Level {
 		this.questionPosed.position.set(-6, 5.0, 1.4);
 		PIEaddElement(this.questionPosed);
 		this.getCheckButton();
+		if(this.levelDone[this.currentPart] == true || this.gaveUpBool[this.currentPart] == true){
+			this.resetText = drawText("click on Reset", 0xbcbcbc, 0.3, 0.001, fontOptimer, 0.0, true);
+			this.resetText.position.set(-1.5, -3.8, 1.6);
+			PIEaddElement(this.resetText);
+		}
 		PIEaddElement(this.checkButton);
 		this.redrawLevel();
 		
@@ -1512,7 +1517,8 @@ function loadExperimentElements() {
 	preLoad();
 	PIEsetAreaOfInterest(-10, 10, 10, -10);
 	initBackgroundForGame();
-
+	initialiseHelp();
+	initialiseInfo();
 	document.addEventListener("mousedown", onMouseDown, false);
 }
 
@@ -1638,4 +1644,37 @@ function onWindowResize(){
 		prevSize = window.innerWidth;
 		if(lvl) lvl.redrawLevel();
 	}
+}
+
+var helpContent;
+function initialiseHelp()
+{
+    helpContent="";
+    helpContent = helpContent + "<h2>The Resistors Game</h2>";
+    helpContent = helpContent + "<h3>About the experiment</h3>";
+    helpContent = helpContent + "<p>The experiment shows the workings of the resistances</p>";
+    helpContent = helpContent + "<h3>Animation control</h3>";
+    helpContent = helpContent + "<p>The top line has animation controls. There is only one state of the experiment.</p>";
+    helpContent = helpContent + "<h3>The animation stage</h3>";
+    helpContent = helpContent + "<p>This is where all the fun happens</p>";
+    helpContent = helpContent + "<p>You can reset any level by using reset button on the top line</p>";
+	helpContent = helpContent + "<p>When you click on the start Game button the controls for changing level appears</p>";
+	helpContent = helpContent + "<p>There are controls next and previous for moving between the various parts of a level</p>";
+    helpContent = helpContent + "<h3>Important notes</h3>";
+    helpContent = helpContent + "<p>Click on the Check to see if your calculations are correct or incorrect</p>";
+    helpContent = helpContent + "<p>Reset after giving up or when You get the right answer to play again</p>";
+    helpContent = helpContent + "<h2>Happy Experimenting</h2>";
+    PIEupdateHelp(helpContent);
+}
+
+var infoContent;
+function initialiseInfo()
+{
+    infoContent =  "";
+    infoContent = infoContent + "<h2>Experiment Concepts</h2>";
+    infoContent = infoContent + "<h3>About the experiment</h3>";
+    infoContent = infoContent + "<p>The experiment shows a game that teaches you how to use resistances in series and parallel circuit</p>";
+    infoContent = infoContent + "<p>The difficulty increases as the level increases</p>";
+    infoContent = infoContent + "<h2>Happy Experimenting</h2>";
+    PIEupdateInfo(infoContent);
 }
