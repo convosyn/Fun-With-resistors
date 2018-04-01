@@ -1,4 +1,4 @@
-// For mouse detection
+ // For mouse detection
 var oml = {
 	BTL: "1", 
 	BTR: "2", 
@@ -65,7 +65,16 @@ const levelDet = {
 		"resistances": [1, 2, 3, 4],
 		"solutions": [[0, 1], [1, 3]],
 		"questions": [3, (4 / 3).toFixed(2)],
-		"formula": ["( 0 + 1 )", "( ( 0 * 1 ) / ( 0 + 1 ) )"]
+		"formula": ["( 0 + 1 )", "( ( 0 * 1 ) / ( 0 + 1 ) )"],
+		"calculation": [
+			"R1 = <0> ohm\n" + 
+			"R2 = <1> ohm\n" + 
+			"Total Resistance = <0> + <1> = {(#0#+#1#)} ohm",
+
+			"R1 = <0> ohm\n" + 
+			"R2 = <1> ohm\n" +
+			"Total Resistance = 1 / <0> + 1 / <1> = {(#(#0#*#1#)#/#(#0#+#1#)#)} ohm"
+		]
 	},
 	2: {
 		"map": [
@@ -83,7 +92,25 @@ const levelDet = {
 		"formula": [
 				"( 0 * 1 * 2 ) / ( 0 * 1 + 1 * 2 + 2 * 0 )",
 				"( ( 0 + 1 ) * 2 ) / ( 0 + 1 + 2 )"
-			]
+			],
+		"calculation": [
+			"R1 = <0> ohm\n" + 
+			"R2 = <1> ohm\n" + 
+			"R3 = <2> ohm\n" +
+			"Since, all are in parallel, we have\n"+
+			"1/R = 1/R1 + 1/R2 + 1/R3, therefore\n" +
+			"Total Resistance = ( <0> x <1> x <2> ) / ( <0> x <1> + <1> x <2> + <2> x <0> )\n" +
+			"= {(#0#*#1#*#2#)#/#(#0#*#1#+#1#*#2#+#2#*#0#)} ohm", 
+			
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" + 
+			"R3 = <2> ohm\n" + 
+			"R1 and R2 in series, therefore there total Resistance Rs is\n" + 
+			"Rs = R1 + R2 = <0> + <1> = {(#0#+#1#)}\n" +
+			"R3 and Rs are in parallel, therefore \n" + 
+			"1/R = 1/R3 + 1/Rs\n = 1 / <2> + 1 / {(#0#+#1#)}\n" +  
+			"R = ( {(#0#+#1#)} x <2> ) / ( {(#0#+#1#)} + <2> ) = {(#(#0#+#1#)#*#2#)#/#(#0#+#1#+#2#)} ohm"
+		]
 	},
 	3: {
 		"map": [
@@ -109,6 +136,38 @@ const levelDet = {
 			"( ( 0 + 1 ) * ( 2 + 3 ) ) / ( 0 + 1 + 2 + 3 )", 
 			"( ( 0 + 1 ) * ( 2 * 3 ) ) / ( ( 2 * 3 ) + ( 2 + 3 ) * ( 0 + 1 ) )",
 			"( 0 * 1 * 2 * 3 ) / ( ( 0 + 1 ) * 2 * 3 + ( 2 + 3 ) * 0 * 1 )"
+		],
+		"calculation": [
+			"R1 = <0> ohm\n" + 
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" + 
+			"R4 = <3> ohm\n" +
+			"R1 and R2 in series, therefore,\n" +
+			"Rs1 = R1 + R2 = <0> + <1> = {(#0#+#1#)} ohm\n" +
+			"Similarly, R3 and R4 in series, so\n" +
+			"Rs2 = R3 + R4 = <2> + <3> = {(#2#+#3#)} ohm\n" + 
+			"1/R = 1/Rs1 + 1/Rs2 = 1 / {(#0#+#1#)} + 1 / {(#2#+#3#)}\n" +
+			"R = (Rs1 x Rs2) / (Rs1 + Rs2) = {(#(#0#+#1#)#*#(#2#+#3#)#)#/#(#0#+#1#+#2#+#3#)} ohm", 
+			
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"R1 and R2 in series, therefore,\n" +
+			"Rs = R1 + R2 = <0> + <1> = {(#0#+#1#)} ohm\n" +
+			"R3 and R4 are in parallel, therefore,\n" +
+			"Rp = (R3 x R4)/(R3 + R4) = {(#(#2#*#3#)#/#(#2#+#3#)#)} ohm\n" + 
+			"R = (Rs x Rp) / (Rs + Rp) = {(#(#0#+#1#)#*#(#2#*#3#)#)#/#(#(#2#*#3#)#+#(#2#+#3#)#*#(#0#+#1#)#)} ohm",
+
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"R1 and R2 are in parallel, therefore,\n" +
+			"Rp1 = ( <0> x <1> ) / ( <0> + <1> ) = {(#(#0#*#1#)#/#(#0#+#1#)#)} ohm\n" +
+			"similarly, for R3 and R4\n" +
+			"Rp2 = ( <2> x <3> ) / ( <2> + <3> ) = {(#(#2#*#3#)#/#(#2#+#3#)#)} ohm\n" + 
+			"R = (Rp1 x Rp2) / (Rp1 + Rp2) = {(#0#*#1#*#2#*#3#)#/#(#(#0#+#1#)#*#2#*#3#+#(#2#+#3#)#*#0#*#1#)} ohm"
 		]
 	},
 	4: {
@@ -128,6 +187,27 @@ const levelDet = {
 		"formula": [
 			"( ( 0 + 1 + 2 ) * 3 ) / ( 0 + 1 + 2 + 3 )",
 			"( 0 * 1 * 2 * 3 ) / ( ( 0 + 1 ) * 2 * 3 + ( 2 + 3 ) * 0 * 1 )"
+		],
+		"calculation": [
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"R1 and R2 and R3 are in series, therefore,\n" +
+			"Rs = ( <0> + <1> + <2> ) = {(#0#+#1#+#2#)} ohm\n" +
+			"Rs and R4 are in parallel, therefore, \n" +
+			"R = ( {(#0#+#1#+#2#)} x <3> ) / ( {(#0#+#1#+#2#)} + <3> ) = {(#(#0#+#1#+#2#)#*#3#)#/#(#0#+#1#+#2#+#3#)} ohm\n", 
+			
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"Here, R2, R3, R4 are in parallel, so\n" +
+			"1/Rp = 1/R2 + 1/R3 + 1/R4, or\n" +
+			"Rp = (R2 x R3 x R4)/(R2 x R3 + R3 x R4 + R4 x R2)\n" +
+			"= {(#1#*#2#*#3#)#/#(#1#*#2#+#2#*#3#+#3#*#1#)} ohm\n" +
+			"R1 and Rp are in parallel, therefore total resistance is,\n" + 
+			"R = (R1 x Rp)/(R1 + Rp) = {(#0#*#1#*#2#*#3#)#/#(#(#0#+#1#)#*#2#*#3#+#(#2#+#3#)#*#0#*#1#)} ohm"
 		]
 	},
 	5: {
@@ -161,6 +241,57 @@ const levelDet = {
 			"( ( 0 + 1 + 2 ) * ( 3 * 4 ) ) / ( ( 3 * 4 ) + ( 3 + 4 ) * ( 0 + 1 + 2 ) )",
 			"( ( 2 * 3 * 4 ) * ( 0 + 1 ) ) / ( ( 0 + 1 ) * ( 2 * 3 + 3 * 4 + 4 * 2 ) + ( 2 * 3 * 4 ) )",
 			"( ( 0 * 1 * 2 * 3 * 4 ) / ( ( 0 + 1 ) * ( 2 * 3 * 4 ) + ( 2 * 3 + 3 * 4 + 4 * 2 ) * ( 0 * 1 ) ) )"
+		],
+		"calculation": [
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"R5 = <4> ohm\n" +
+			"R1, R2, R3 are in series, therefore,\n" +
+			"Rs1 = ( <0> + <1> + <2> ) = {(#0#+#1#+#2#)} ohm\n" +
+			"R4 and R5 are in series, therefore,\n" +
+			"Rs2 = ( <3> + <4> ) = {(#3#+#4#)} ohm\n" +
+			"Rs1 and Rs2 are in parallel, therefore,\n" +
+			"R = (Rs1 x Rs2) / (Rs1 + Rs2) = {(#(#0#+#1#+#2#)#*#(#3#+#4#)#)#/#(#0#+#1#+#2#+#3#+#4#)} ohm", 
+			
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"R5 = <4> ohm\n" +
+			"R1, R2, R3 are in series, therefore,\n" +
+			"Rs = ( <0> + <1> + <2> ) = {(#0#+#1#+#2#)} ohm\n" +
+			"R4 and R5 are in parallel, therefore,\n" +
+			"Rp = ( <3> x <4> ) / ( <3> + <4> ) = {(#3#*#4#)#/#(#3#+#4#)} ohm\n" +
+			"Rs and Rp are in parallel, therefore,\n" +
+			"R = (Rs x Rp) / (Rs + Rp) = {(#(#0#+#1#+#2#)#*#(#3#*#4#)#)#/#(#(#3#*#4#)#+#(#3#+#4#)#*#(#0#+#1#+#2#)#)} ohm", 
+
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"R5 = <4> ohm\n" +
+			"R1, R2 are in series, therefore,\n" +
+			"Rs = ( <0> + <1> ) = {(#0#+#1#+#2#)} ohm\n" +
+			"R4 and R5 are in parallel, therefore,\n" +
+			"Rp = ( <2> x <3> x <4> ) / ( <2> * <3> + <3> * <4> + <4> * <3>  ) = {(#2#*#3#*#4)#/#(#2#*#3#+#3#*#4#+#4#*#3#)} ohm\n" +
+			"Rs and Rp are in parallel, therefore,\n" +
+			"R = (Rs x Rp) / (Rs + Rp) = {(#(#2#*#3#*#4#)#*#(#0#+#1#)#)#/#(#(#0#+#1#)#*#(#2#*#3#+#3#*#4#+#4#*#2#)#+#(#2#*#3#*#4#)#)} ohm", 
+
+
+			"R1 = <0> ohm\n" +
+			"R2 = <1> ohm\n" +
+			"R3 = <2> ohm\n" +
+			"R4 = <3> ohm\n" +
+			"R5 = <4> ohm\n" +
+			"R1, R2 are in parallel, therefore,\n" +
+			"Rp1 = ( ( <0> x <1> ) / ( <0> + <1> ) ) = {(#(#0#*#1#)#/#(#0#+#1#)#)#} ohm\n" +
+			"R4 and R5 are in parallel, therefore,\n" +
+			"Rp2 = ( <2> x <3> x <4> ) / ( <2> * <3> + <3> * <4> + <4> * <3>  ) = {(#2#*#3#*#4)#/#(#2#*#3#+#3#*#4#+#4#*#3#)} ohm\n" +
+			"Rp1 and Rp2 are in parallel, therefore,\n" +
+			"R = (Rp1 x Rp2) / (Rp1 + Rp2) = {(#(#0#*#1#*#2#*#3#*#4#)#/#(#(#0#+#1#)#*#(#2#*#3#*#4#)#+#(#2#*#3#+#3#*#4#+#4#*#2#)#*#(#0#*#1#)#)#)} ohm", 
+
 		]
 	}
 
@@ -239,6 +370,41 @@ function calculateRPN(rpnArray){
 	}
 	console.log(stack[0]);
 	return stack[0];
+}
+
+function parseModelText(string, resistanceSet){
+	let group = new THREE.Group();
+	let lines = string.split('\n');
+	curY = 0;
+	console.log("following resistances are in order " + resistanceSet);
+	for(const ln of lines){
+		let tokens = ln.split(" ");
+		console.log("Tokens are : " + tokens);
+		let processed = "";
+		for(let tk of tokens){
+			if(tk[0] == '<' && tk[tk.length - 1] == ">"){
+				console.log("token as such detected " + tk.substr(parseInt(tk)));
+				processed += resistanceSet[parseInt(tk.substr(1, tk.length - 2))] + " ";
+			} else if(tk[0] == '{' && tk[tk.length - 1] == "}"){
+				let e = tk.split("#").join(" ");
+				console.log(e);
+				exp = processExpression(e.substr(1, tk.length - 2), resistanceSet);
+				if(exp - parseInt(exp) > 0){
+					exp = exp.toFixed(2);
+				}
+				console.log("Expression detected " + exp);
+				processed += exp + " ";
+			} else {
+				console.log("putting as such");
+				processed += tk + " ";
+			}
+		}
+		let text = drawText(processed, 0x000000, 0.4, 0.001, fontGentilis, 0.0, true);
+		text.position.y = curY;
+		curY -= 0.7;
+		group.add(text);
+	}
+	return group;
 }
 
 function drawText(text, color, size, height, font, rotation = 0.2, basic = false){
@@ -578,13 +744,14 @@ class LevelBendObject{
 }
 
 class LevelCoverBoxEmptyObject{
-	constructor(width = 1, height = 1, innerFillColor = 0x000000, outerFillColor = 0xffffff, thickness = 0.1, single = false){
+	constructor(width = 1, height = 1, innerFillColor = 0x000000, outerFillColor = 0xffffff, thickness = 0.1, single = false, text = null){
 		this.width = width;
 		this.height = height;
 		this.innerFillColor = innerFillColor;
 		this.outerFillColor = outerFillColor;
 		this.thickness = thickness;
 		this.single = single;
+		this.text = text;
 		this.object = this.parseObject();
 	}
 
@@ -770,7 +937,7 @@ class ResistanceBox{
 }
 
 class LevelPart{
-	constructor(levelString, color, availableResistances, solution, formula){
+	constructor(levelString, color, availableResistances, solution, formula, calculationMethod){
 		this.color = color;
 		this.levelString = levelString;
 		this.objects = [];
@@ -778,6 +945,8 @@ class LevelPart{
 		this.solution = solution;
 		this.positions = [];
 		this.filled = [];
+		this.calculationMethod = calculationMethod;
+		this.resistanceTexts = [];
 		// this.suplimentResPos = [];
 		this.dialogOpenedForIndex = -1;
 		this.mappedToResistance = [];
@@ -814,6 +983,19 @@ class LevelPart{
 			}
 		}
 		return processExpression(this.formula, valueSet);
+	}
+
+	checkCalculation(){
+		if(this.finalCheckCalculation){
+			PIEremoveElement(this.finalCheckCalculation);
+			this.finalCheckCalculation = null;
+		}
+		let valueSet = [];
+		console.log("Mappings " + this.mappedToResistance);
+		for(let i = 0; i < this.mappedToResistance.length; ++i){
+			valueSet.push(this.availableResistances.mappingIndex(this.mappedToResistance[i]));
+		}
+		return parseModelText(this.calculationMethod, valueSet);
 	}
 
 	parseLevel(){
@@ -885,6 +1067,13 @@ class LevelPart{
 					case oml.RB:
 						console.log("matched: " + 13);
 						temp = new LevelCoverBoxEmptyObject(1, 0.9, 0xc6c11b, this.color, 0.1);
+						let text = alignCenter(drawText("R" + (this.objects.length + 1), 0xffffff, 0.3, 0.001, fontHelvetick, 0.0, true), temp.draw)[0];
+						text.position.x += curX;
+						text.position.y += curY + 0.4;
+						text.position.z = 1.3;
+
+						group.add(text);
+						this.resistanceTexts.push(text);
 						this.objects.push(temp.draw);
 						this.filled.push(null);
 						this.mappedToResistance.push(-1);
@@ -935,6 +1124,7 @@ class LevelPart{
 	
 		group.position.x -= (centerXbb - centerXBoard);
 		group.position.y -= (centerYbb - centerYBoard);
+		for(let i = 0; i < this.resistanceTexts.length; ++i) this.adjustText(i);
 	
 		// let
 		// let bx = this.grou
@@ -945,6 +1135,16 @@ class LevelPart{
 		// groz//
 
 		return group;
+	}
+
+	adjustText(index){ 
+		console.log(this.resistanceTexts[index]);
+		if(this.filled[index] != null){
+			this.resistanceTexts[index].material.color.setHex(0xbcbcbc);
+		} else {
+			this.resistanceTexts[index].material.color.setHex(0x000000);
+		}
+		PIErender();
 	}
 
 	checkClick(){
@@ -989,6 +1189,7 @@ class LevelPart{
 			// console.log("Removing Box " + this.objects[index]);
 			this.drawen.remove(this.objects[index]);
 			PIEremoveElement(this.objects[index]);
+			this.adjustText(index);
 			this.redraw();
 			PIErender();
 			return true;
@@ -1016,6 +1217,7 @@ class LevelPart{
 				this.drawen.add(this.objects[this.dialogOpenedForIndex]);
 				this.availableResistances.draw(this.dialogOpenedForIndex);
 				this.filled[this.dialogOpenedForIndex] = null;
+				this.adjustText(this.dialogOpenedForIndex);
 				this.mappedToResistance[this.dialogOpenedForIndex] = -1;
 				this.dialogOpenedForIndex = -1;
 				this.dialog = null;
@@ -1123,6 +1325,7 @@ class LevelPart{
 			// this.suplimentResPos[index] = new THREE.Vector3().getPositionFromMatrix(this.filled[index].children[5].matrixWorld);
 			PIEaddElement(this.filled[index]);
 			this.drawen.add(this.filled[index]);
+			this.adjustText(index);
 			// console.log("Removing Box " + this.objects[index]);
 			this.drawen.remove(this.objects[index]);
 			PIEremoveElement(this.objects[index]);
@@ -1205,12 +1408,13 @@ class LevelPart{
 }
 
 class Level {
-	constructor(levelDetails, resistances, solutions, questions, formula) {
+	constructor(levelDetails, resistances, solutions, questions, formula, solutionCalculation) {
 		this.levelDetails = levelDetails
 		// this.positions = position;
 		this.solutions = solutions;
 		this.questions = questions;
 		this.formula = formula;
+		this.solutionCalculation = solutionCalculation;
 		this.cache = [];
 		for(let i = 0; i < this.levelDetails.length; ++i) this.cache.push(null);
 		this.levelDrawen = null;
@@ -1227,10 +1431,14 @@ class Level {
 			this.levelDone.push(false);
 			this.gaveUpBool.push(false);
 		}
+		this.displayingSolutionCalculation = false;
 		this.checkButton;
 		this.questionPosed = null;
 		this.resultText = null;
 		this.resetText = null;
+		this.solutionButton = null;
+		this.solutionInfo = null;
+		this.solutionCross = null;
 	}
 	
 	parseLevels() {
@@ -1250,18 +1458,21 @@ class Level {
 			if(res - parseInt(res) != 0) res = res.toFixed(2);
 		}
 		if(res == "UNFILLED"){
-			this.resultText = drawText("FILL ALL VALUES!", 0xffffff, 0.5, 0.001, fontOptimer, 0.0, true);	
-			this.resultText.position.set(-3, -4.5, 1.6);
+			this.resultText = drawText("CHOOSE ALL VALUES!", 0xffffff, 0.5, 0.001, fontOptimer, 0.0, true);	
+			this.resultText.position.set(-5, -4.5, 1.6);
 		} else if(res == this.questions[this.currentPart]){
 			this.resultText = drawText("CORRECT!", 0x00ff00, 0.5, 0.001, fontOptimer, 0.0, true);
-			this.resultText.position.set(-2, -4.5, 1.6);
+			this.resultText.position.set(-4, -4.5, 1.6);
 			this.levelDone[this.currentPart] = true;
 			this.resetText = drawText("click on Reset", 0xbcbcbc, 0.3, 0.001, fontOptimer, 0.0, true)
-			this.resetText.position.set(-1.5, -3.8, 1.6);
+			this.resetText.position.set(-2.5, -4.9, 1.6);
 			PIEaddElement(this.resetText);
 		} else {
 			this.resultText = drawText("WRONG!", 0xff4433, 0.5, 0.001, fontOptimer, 0.0, true);
 			this.resultText.position.set(-2, -4.5, 1.6);
+		}
+		if(res != "UNFILLED"){
+			this.addSolutionButton();
 		}
 		this.redrawLevel();
 		PIEaddElement(this.resultText);
@@ -1276,7 +1487,57 @@ class Level {
 		// }
 	}
 
+	addSolutionButton(){
+		if(this.solutionButton) PIEremoveElement(this.solutionButton);
+		console.log("adding solution button");
+		this.solutionButton = null;
+		let solText = drawText("Calculation", 0xbcbcbc, 0.6, 0.001, fontHelvetick, 0.0, true);
+		solText.position.z = 0.1;
+		let bx = getRestructuredBoundingBox(solText, 1.3, 2.0, true, 0x3344ff, 1.0);
+		this.solutionButton = new THREE.Group();
+		this.solutionButton.add(solText);
+		this.solutionButton.add(bx);
+		this.solutionButton.position.set(6, 5.5, 1.6);
+		PIEaddElement(this.solutionButton);
+	}
+
+	checkCalculation(){
+		let calc = this.levelDrawen.checkCalculation();
+		this.solutionInfo = new THREE.Group();
+		let border = new LevelCoverBoxEmptyObject(18, 14, 0xffffff, 0xffffff, 0.1, true).draw;
+		this.solutionInfo.add(calc);
+		this.solutionInfo.add(border);
+		calc.position.z = 0.1;
+		calc.position.x = -4;
+		calc.position.y = 6;
+		this.solutionInfo.position.z = 2.6;
+		
+		let bb = new THREE.Box3().setFromObject(calc);
+		let bbBoard = new THREE.Box3().setFromObject(border);
+		// let Zwidth = bb.max.z - bb.min.z;
+		// let incXWidth = Xwidth * sc?alex;
+		// let incYWidth = Ywidth * scaley;
+	// 
+		let centerXbb = (bb.max.x + bb.min.x)/2;
+		let centerYbb = (bb.max.y + bb.min.y)/2;
+	// 
+		let centerXBoard = (bbBoard.max.x + bbBoard.min.x)/2;
+		let centerYBoard = (bbBoard.max.y + bbBoard.min.y)/2;
+	
+		calc.position.x -= (centerXbb - centerXBoard);
+		calc.position.y -= (centerYbb - centerYBoard);
+		this.displayingSolutionCalculation = true;
+		
+		// bb = new THREE.Box3().setFromObject(this.solutionInfo);
+		this.solutionCross = drawText("X", 0x000000, 1, 0.001, fontOptimer, 0.0, true);
+		// this.solutionCross.position.z = 2.7;
+		this.solutionCross.position.set(-8, 5, 2.7);
+		// PIEaddElement(this.solutionCross);
+		this.solutionInfo.add(this.solutionCross);
+		PIEaddElement(this.solutionInfo);
+	}
 	checkClick(){
+
 		if(this.changePartNext){
 			let intersects = raycaster.intersectObjects(this.changePartNext.children);
 			if(intersects.length > 0){
@@ -1294,6 +1555,23 @@ class Level {
 			}
 		}
 
+		if(this.displayingSolutionCalculation == true){
+			if(raycaster.intersectObjects([this.solutionCross]).length > 0){
+				PIEremoveElement(this.solutionInfo);
+				this.displayingSolutionCalculation = false;
+				this.solutionInfo = null;
+			}
+			return true;
+		}
+
+		if(this.solutionButton){
+			let intersects = raycaster.intersectObjects(this.solutionButton.children);
+			if(intersects.length > 0){
+				this.checkCalculation();
+			}
+			this.redrawLevel();
+		}
+
 		if(this.levelDone[this.currentPart] == true || this.gaveUpBool[this.currentPart] == true){
 			console.log("returning on level gaveup or done");
 			 return;}
@@ -1307,6 +1585,15 @@ class Level {
 			if(this.resetText) {
 				PIEremoveElement(this.resetText);
 				this.resetText = null;
+			}
+			if(this.solutionButton){
+				PIEremoveElement(this.solutionButton);
+				this.solutionButton = null;
+			}
+			if(this.solutionInfo){
+				PIEremoveElement(this.solutionInfo);
+				this.solutionInfo = null;
+				this.displayingSolutionCalculation = false;
 			}
 			return true;
 		}
@@ -1331,6 +1618,7 @@ class Level {
 			this.getCheckButton();
 			PIEaddElement(this.checkButton);
 			this.levelDrawen.showSolution();
+			this.addSolutionButton();
 			this.redrawLevel();
 			return true;
 		}
@@ -1342,7 +1630,7 @@ class Level {
 		if(this.cache[this.currentPart] && !reset){
 			this.levelDrawen = this.cache[this.currentPart];
 		} else {
-			this.levelDrawen = new LevelPart(this.levelDetails[this.currentPart], this.color, this.resistances, this.solutions[this.currentPart], this.formula[this.currentPart]);
+			this.levelDrawen = new LevelPart(this.levelDetails[this.currentPart], this.color, this.resistances, this.solutions[this.currentPart], this.formula[this.currentPart], this.solutionCalculation[this.currentPart]);
 			this.cache[this.currentPart] = this.levelDrawen;	
 		}
 		this.levelDrawen.draw();
@@ -1402,6 +1690,7 @@ class Level {
 			this.resetText = drawText("click on Reset", 0xbcbcbc, 0.3, 0.001, fontOptimer, 0.0, true);
 			this.resetText.position.set(-1.5, -3.8, 1.6);
 			PIEaddElement(this.resetText);
+			this.addSolutionButton();
 		}
 		PIEaddElement(this.checkButton);
 		this.redrawLevel();
@@ -1435,6 +1724,11 @@ class Level {
 				this.resultText.scale.x = 2.0;
 				this.resultText.position.set(-3, -4.5, 1.6);
 			}
+			if(this.displayingSolutionCalculation){
+				this.solutionInfo.children[0].scale.x = 1.3;
+				this.solutionInfo.children[0].position.x = -8.0;
+				this.solutionInfo.scale.x = 2.0;
+			}
 		} else {
 			this.questionPosed.scale.x = 1.0;
 			this.questionPosed.scale.y = 1.0;
@@ -1447,6 +1741,11 @@ class Level {
 			if(this.resultText){
 				this.resultText.scale.x = 1.0;
 				this.resultText.position.set(-2, -4.5, 1.6);
+			}
+			if(this.displayingSolutionCalculation){
+				this.solutionInfo.children[0].scale.x = 1.0;
+				this.solutionInfo.children[0].position.x = -6.0;
+				this.solutionInfo.scale.x = 1.0;
 			}
 		}
 		this.levelDrawen.redraw();
@@ -1494,13 +1793,16 @@ class Level {
 	}
 
 	removeLevel(){
+		if(this.solutionInfo) PIEremoveElement(this.solutionInfo);
+		if(this.solutionButton) PIEremoveElement(this.solutionButton);
 		if(this.resetText) PIEremoveElement(this.resetText);
 		if(this.resultText) PIEremoveElement(this.resultText);
 		if(this.questionPosed) PIEremoveElement(this.questionPosed);
 		if(this.changePartNext) PIEremoveElement(this.changePartNext);
 		if(this.changePartPrev) PIEremoveElement(this.changePartPrev); 	
 		if(this.giveupButtom) PIEremoveElement(this.giveupButtom);
-		this.resetText = this.resultText = this.changePartNext = this.changePartPrev = null;
+		this.solutionInfo = this.solutionButton = this.resetText = this.resultText = this.changePartNext = this.changePartPrev = null;
+		this.displayingSolutionCalculation = false;
 		this.levelDrawen.remove();
 	}
 }
@@ -1566,7 +1868,7 @@ function newLevel(newStart = false){
 	curLevelText.position.x = 1.2;
 	curLevelText.position.y = 5.7;
 	if(lvl){lvl.removeLevel();}
-	lvl = new Level(levelDet[currentLevel].map, levelDet[currentLevel].resistances, levelDet[currentLevel].solutions, levelDet[currentLevel].questions, levelDet[currentLevel].formula);
+	lvl = new Level(levelDet[currentLevel].map, levelDet[currentLevel].resistances, levelDet[currentLevel].solutions, levelDet[currentLevel].questions, levelDet[currentLevel].formula, levelDet[currentLevel].calculation);
 	// lvl.parseLevels();
 	lvl.showLevel();
 	PIEaddElement(curLevelText);
