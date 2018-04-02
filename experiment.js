@@ -508,6 +508,10 @@ function preLoad(){
 function runBootstrap(){
 	startScreen = new THREE.Group();
 	let textStartGame = drawText("START GAME", 0xbcbcbc, 0.8, 0.001, fontOptimer, 0.0, true);
+	let funWithRes = drawText("Fun With Resistors", 0x7c95bf, 1.4, 0.5, fontOptimer, 0.0, false);
+	// funWithRes.rotation.y = deg2Rad(5);
+	funWithRes.rotation.y = deg2Rad(-5);
+	funWithRes.position.set(-4, 3, 2.4);
 	// let coverBoxGeo = new THREE.PlaneGeometry(8, 3);
 	// let coverMaterial = new THREE.MeshBasicMaterial({color: 0x000000, transparent: true});
 	// coverMaterial.opacity = 0.3;
@@ -516,6 +520,7 @@ function runBootstrap(){
 	textStartGame.position.z = 0.1;
 	startScreen.add(textStartGame);
 	startScreen.add(coverBox);
+	startScreen.add(funWithRes);
 	startScreen.position.z = 0.2;
 	startScreen.position.x = -4;
 	showingStart = true;
@@ -1830,7 +1835,10 @@ var levelString =
 
 function loadExperimentElements() {
 	preLoad();
+	PIEsetDeveloperName("Kartik Verma");
+	PIEsetExperimentTitle("Fun With Resistors");
 	PIEsetAreaOfInterest(-10, 10, 10, -10);
+	PIEscene.background = new THREE.Color(0xababab);
 	initBackgroundForGame();
 	initialiseHelp();
 	initialiseInfo();
